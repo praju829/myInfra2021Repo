@@ -2,6 +2,10 @@ provider "aws" {
   region = var.aws_region
 }
 
+resource "random_id" "suffix" {
+  byte_length = 4
+}
+
 resource "aws_vpc" "main" {
   cidr_block = "172.16.0.0/16"
   instance_tenancy = "default"
@@ -12,7 +16,7 @@ resource "aws_vpc" "main" {
 
 #Create security group with firewall rules
 resource "aws_security_group" "Terra-sg11" {
-  name        = var.security_group
+  name        = "${var.security_group}-${random_id.suffix.hex}"
   description = "security group for Ec2 instance"
 
   ingress {
