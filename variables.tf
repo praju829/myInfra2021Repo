@@ -14,7 +14,7 @@ variable "instance_type" {
 }
 
 variable "security_group" { 
-    description = "Name of security group" 
+    description = "Base name of the security group (a unique suffix will be added)"
     default     = "Terra-sg11" 
 }
 
