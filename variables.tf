@@ -15,7 +15,7 @@ variable "instance_type" {
 
 variable "security_group" { 
     description = "Name of security group" 
-    default     = "JenkinsSG1" 
+    default     = "Terra-sg11" 
 }
 
 variable "tag_name" { 
