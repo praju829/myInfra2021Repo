@@ -1,9 +1,6 @@
+
 provider "aws" {
   region = var.aws_region
-}
-
-resource "random_id" "suffix" {
-  byte_length = 4
 }
 
 resource "aws_vpc" "main" {
@@ -14,23 +11,10 @@ resource "aws_vpc" "main" {
   }
 }
 
-# Create a public subnet in the custom VPC
-resource "aws_subnet" "main_subnet" {
-  vpc_id                  = aws_vpc.main.id
-  cidr_block              = "172.16.1.0/24"
-  availability_zone       = "ap-south-1a"
-  map_public_ip_on_launch = true
-
-  tags = {
-    Name = "main-subnet"
-  }
-}
-
 #Create security group with firewall rules
-resource "aws_security_group" "Terra-sg11" {
-  name        = "${var.security_group}-${random_id.suffix.hex}"
+resource "aws_security_group" "jenkins-sg-2025" {
+  name        = var.security_group
   description = "security group for Ec2 instance"
-  vpc_id      = aws_vpc.main.id
 
   ingress {
     from_port   = 8080
@@ -55,16 +39,15 @@ resource "aws_security_group" "Terra-sg11" {
   }
 
   tags= {
-    Name = "${var.security_group}-${random_id.suffix.hex}"  
+    Name = var.security_group
   }
 }
 
 resource "aws_instance" "myFirstInstance" {
-  ami                    = var.ami_id
-  key_name               = var.key_name
-  instance_type          = var.instance_type
-  vpc_security_group_ids = [aws_security_group.Terra-sg11.id]
-
+  ami           = var.ami_id
+  key_name = var.key_name
+  instance_type = var.instance_type
+  vpc_security_group_ids = [aws_security_group.jenkins-sg-2025.id]
   tags= {
     Name = var.tag_name
   }
@@ -73,8 +56,8 @@ resource "aws_instance" "myFirstInstance" {
 # Create Elastic IP address
 #resource "aws_eip" "myFirstInstance" {
  # vpc      = true
- # instance = aws_instance.myFirstInstance.id
+#  instance = aws_instance.myFirstInstance.id
 #tags= {
-  #  Name = "my_elastic_ip"
-  #}
+#    Name = "my_elastic_ip"
+#  }
 #}
